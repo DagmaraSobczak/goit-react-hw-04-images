@@ -18,7 +18,7 @@ const ImageGalleryItem = ({ image, onSelect }) => {
 };
 
 ImageGalleryItem.propTypes = {
-  images: PropTypes.arrayOf(
+  image: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       webformatURL: PropTypes.string.isRequired,

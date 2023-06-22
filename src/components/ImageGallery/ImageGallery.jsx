@@ -1,28 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import css from './ImageGallery.module.css';
 
-class ImageGallery extends Component {
-  handleImageSelect = largeImageURL => {
-    this.props.onSelect(largeImageURL);
+const ImageGallery = ({ images, onSelect, showModal }) => {
+  const handleImageSelect = largeImageURL => {
+    onSelect(largeImageURL);
   };
 
-  render() {
-    return (
-      <ul className={css.imageGallery}>
-        {this.props.images.map((image, index) => (
-          <ImageGalleryItem
-            showModal={this.props.showModal}
-            key={index} // Używamy indeksu jako klucza
-            image={image}
-            onSelect={this.handleImageSelect}
-          />
-        ))}
-      </ul>
-    );
-  }
-}
+  return (
+    <ul className={css.imageGallery}>
+      {images.map((image, index) => (
+        <ImageGalleryItem
+          showModal={showModal}
+          key={index}
+          image={image}
+          onSelect={handleImageSelect}
+        />
+      ))}
+    </ul>
+  );
+};
 
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(
