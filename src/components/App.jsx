@@ -15,38 +15,40 @@ const App = () => {
   const [showModal, setShowModal] = useState(null);
   const [totalItems, setTotalItems] = useState(0);
 
-  const getImages = async () => {
-    if (searchQuery.trim() === '') {
-      return;
-    }
+  useEffect(() => {
+    const getImages = async () => {
+      if (searchQuery.trim() === '') {
+        return;
+      }
 
-    const API_KEY = '34772301-2558f091501b1829db2bd0b62';
+      const API_KEY = '34772301-2558f091501b1829db2bd0b62';
+      setLoading(true);
 
-    setLoading(true);
+      try {
+        const response = await axios.get(
+          `https://pixabay.com/api/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+        );
 
-    try {
-      const response = await axios.get(
-        `https://pixabay.com/api/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      );
+        const resObject = response.data;
+        const newImages = resObject.hits;
 
-      const resObject = response.data;
-      const newImages = resObject.hits;
+        setImages(prevImages => [...prevImages, ...newImages]);
+        setTotalItems(resObject.totalHits);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+        setLoading(false);
+      }
+    };
 
-      setImages(prevImages => [...prevImages, ...newImages]);
-      setTotalItems(resObject.totalHits);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching images:', error);
-      setLoading(false);
-    }
-  };
+    getImages();
+  }, [searchQuery, page]);
 
   const handleSearchSubmit = query => {
     setSearchQuery(query);
     setImages([]);
     setPage(1);
     setTotalItems(0);
-    getImages();
   };
 
   const handleInputChange = event => {
@@ -55,7 +57,6 @@ const App = () => {
     setImages([]);
     setPage(1);
     setTotalItems(0);
-    getImages();
   };
 
   const handleGetImages = () => {
@@ -63,7 +64,7 @@ const App = () => {
   };
 
   const loadMore = () => {
-    getImages();
+    setPage(prevPage => prevPage + 1);
   };
 
   const handleModalOpen = index => {
