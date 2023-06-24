@@ -64,7 +64,7 @@ const App = () => {
   };
 
   const loadMore = () => {
-    setPage(prevPage => prevPage + 1);
+    setPage(page + 1);
   };
 
   const handleModalOpen = index => {
